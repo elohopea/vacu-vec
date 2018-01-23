@@ -1,0 +1,35 @@
+This game is part of the project on:
+CS-C3170 - Web Software Development, 31.10.2017-13.02.2018
+
+Name:
+Vacuum
+
+
+Idea:
+The player is the AI on a robot vacuum. Vacuum has a mission
+to collect as much dust as possible.
+
+
+Player has:
+- limited battery life
+- limited dust capacity
+
+The world has:
+- randomly generated dust particles.
+- random objects to which the vacuum gets stuck onto and the game ends.
+- charging/dust purging station.
+
+The game window has:
+- current points.
+- battery life remaining
+- dust bin capacity left
+- menu
+    - start
+    - highscore
+    - quit
+    - help
+    - change vacuum color
+    - ...
+
+
+Game will be uploaded to GitHub and hosted there.
