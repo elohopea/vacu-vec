@@ -1,5 +1,7 @@
 /*
     This game is part of Aalto Web software development course.
+    It is based on an example game presented on the course and on
+    W3C HTML game example from: https://www.w3schools.com/graphics/game_intro.asp
 */
 
 
@@ -14,13 +16,6 @@ var floorRugs = [];
 var obstacles = [];
 var gameOver = false;
 var points = 0;
-
-
-function startGame() {
-    if (!gameOver){
-        gameWorld.start();
-    }
-}
 
 
 var gameWorld = {
@@ -150,7 +145,7 @@ function collisionWithPlayer(objects){
     }
 };
 
-
+// loop through objects and call update.
 function updateObjects(objects){
     for (var i = 0; i < objects.length; i++) {
         updateObject(objects[i]);
@@ -256,9 +251,12 @@ $(document).ready( function() {
     });
     window.addEventListener('keyup', function (e) {
         // suction needs to be set based on keyup -event. Behaviour is too erratic otherwise.
-        if (e.keyCode == 32) { robotVacuum.sucking = !robotVacuum.sucking; }
-        gameWorld.keys = (gameWorld.keys || []);
-        gameWorld.keys[e.keyCode] = (e.type == "keydown");
+        if (e.keyCode == 83) {
+            robotVacuum.sucking = !robotVacuum.sucking;
+        }else{
+            gameWorld.keys = (gameWorld.keys || []);
+            gameWorld.keys[e.keyCode] = (e.type == "keydown");
+        }
     });
 
     $("#submit_score").click( function () {
@@ -271,14 +269,16 @@ $(document).ready( function() {
 
 
     $("#restart").click( function () {
+        gameWorld.stop();
+
         robotVacuum = new component(25, 25, "grey", 225, 225, "player");
         dustParticles = [];
         floorRugs = [];
         obstacles = [];
         gameOver = false;
         points = 0;
-
-        startGame();
+        gameWorld.canvas.focus();
+        gameWorld.start();
     });
 
 
@@ -320,6 +320,8 @@ $(document).ready( function() {
     // wants to send (displays them as an alert).
     window.addEventListener("message", function(evt) {
       if(evt.data.messageType === "LOAD") {
+          gameWorld.stop();
+
           robotVacuum     = eval('('+data.gameState.robotVacuum+')');
           dustParticles   = eval('('+data.gameState.dustParticles+')');
           floorRugs       = eval('('+data.gameState.floorRugs+')');
@@ -327,7 +329,7 @@ $(document).ready( function() {
           gameOver        = eval('('+data.gameState.gameOver+')');
           points          = eval('('+data.gameState.score+')');
 
-          startGame();
+          gameWorld.start();
       } else if (evt.data.messageType === "ERROR") {
         alert(evt.data.info);
       }
