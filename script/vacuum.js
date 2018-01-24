@@ -1,8 +1,11 @@
+/*
+    This game is part of Aalto Web software development course.
+*/
+
 
 // Environment parameters
 var windowWidth = 600;
 var windowHeight = 400;
-var test_msg;
 
 // Game variables
 var robotVacuum = new component(25, 25, "grey", 225, 225, "player");
@@ -274,6 +277,7 @@ $(document).ready( function() {
         obstacles = [];
         gameOver = false;
         points = 0;
+
         startGame();
     });
 
@@ -293,7 +297,6 @@ $(document).ready( function() {
             "score" : points
         }
       };
-      test_msg = msg;
       window.parent.postMessage(msg, "*");
     });
 
@@ -301,24 +304,12 @@ $(document).ready( function() {
     // state to be sent, if there is one.
     $("#load").click( function () {
        load_test(test_msg);
- /*
       var msg = {
         "messageType": "LOAD_REQUEST",
       };
       window.parent.postMessage(msg, "*");*/
     });
 
-
-    function load_test (data) {
-            robotVacuum     = eval('('+data.gameState.robotVacuum+')');
-            dustParticles   = eval('('+data.gameState.dustParticles+')');
-            floorRugs       = eval('('+data.gameState.floorRugs+')');
-            obstacles       = eval('('+data.gameState.obstacles+')');
-            gameOver        = eval('('+data.gameState.gameOver+')');
-            points          = eval('('+data.gameState.score+')');
-
-            startGame();
-    }
 
     // Listen incoming messages, if the messageType
     // is LOAD then the game state will be loaded.
@@ -330,14 +321,14 @@ $(document).ready( function() {
     // wants to send (displays them as an alert).
     window.addEventListener("message", function(evt) {
       if(evt.data.messageType === "LOAD") {
-        robotVacuum     = eval('('+evt.data.gameState.robotVacuum+')');
-        dustParticles   = eval('('+evt.data.gameState.dustParticles+')');
-        floorRugs       = eval('('+evt.data.gameState.floorRugs+')');
-        obstacles       = eval('('+evt.data.gameState.obstacles+')');
-        gameOver        = eval('('+evt.data.gameState.gameOver+')');
-        points          = eval('('+evt.data.gameState.score+')');
+          robotVacuum     = eval('('+data.gameState.robotVacuum+')');
+          dustParticles   = eval('('+data.gameState.dustParticles+')');
+          floorRugs       = eval('('+data.gameState.floorRugs+')');
+          obstacles       = eval('('+data.gameState.obstacles+')');
+          gameOver        = eval('('+data.gameState.gameOver+')');
+          points          = eval('('+data.gameState.score+')');
 
-        startGame();
+          startGame();
       } else if (evt.data.messageType === "ERROR") {
         alert(evt.data.info);
       }
