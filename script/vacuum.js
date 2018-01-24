@@ -303,7 +303,6 @@ $(document).ready( function() {
     // Sends a request to the service for a
     // state to be sent, if there is one.
     $("#load").click( function () {
-       load_test(test_msg);
       var msg = {
         "messageType": "LOAD_REQUEST",
       };
