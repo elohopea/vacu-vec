@@ -307,7 +307,7 @@ $(document).ready( function() {
       var msg = {
         "messageType": "LOAD_REQUEST",
       };
-      window.parent.postMessage(msg, "*");*/
+      window.parent.postMessage(msg, "*");
     });
 
 
