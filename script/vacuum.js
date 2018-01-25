@@ -39,7 +39,7 @@ var gameWorld = {
         clearInterval(this.intervalRug);
         clearInterval(this.intervalObstacle);
 
-        drawMessage("Game over", windowWidth/2-150, windowHeight/2-50);
+        drawMessage("Game over", windowWidth/2-100, windowHeight/2-200);
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -219,7 +219,7 @@ function drawStatsOnCanvas(){
     ctx.fillText("Vacuum", 10, 30);
     ctx.fillText("Dust: "+points, 10, windowHeight - 420);
     if (robotVacuum.sucking){
-        ctx.fillText("Suction on", windowWidth-250, windowHeight - 220);
+        ctx.fillText("Suction on", windowWidth-250, windowHeight - 420);
     }
 
 };
