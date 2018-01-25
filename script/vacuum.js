@@ -78,10 +78,10 @@ function newPos(object) {
     var xCandidate = object.x + object.speed * Math.sin(object.angle)
     var yCandidate = object.y - object.speed * Math.cos(object.angle);
 
-    if (xCandidate >= 0 && xCandidate < windowWidth - 10 ) {
+    if (xCandidate >= 0 && xCandidate < windowWidth - 100 ) {
         object.x = xCandidate;
     }
-    if (yCandidate >= 0 && yCandidate < windowHeight - 100) {
+    if (yCandidate >= 0 && yCandidate < windowHeight - 400) {
         object.y = yCandidate;
     }
 }
@@ -217,9 +217,9 @@ function drawStatsOnCanvas(){
     ctx.font = "20px Comic Sans MS";
     ctx.fillStyle = "red";
     ctx.fillText("Vacuum", 10, 30);
-    ctx.fillText("Dust: "+points, 10, windowHeight - 120);
+    ctx.fillText("Dust: "+points, 10, windowHeight - 420);
     if (robotVacuum.sucking){
-        ctx.fillText("Suction on", windowWidth-150, windowHeight - 120);
+        ctx.fillText("Suction on", windowWidth-250, windowHeight - 220);
     }
 
 };
