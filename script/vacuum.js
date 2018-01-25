@@ -6,8 +6,8 @@
 
 
 // Environment parameters
-var windowWidth = 600;
-var windowHeight = 400;
+var windowWidth = 700;
+var windowHeight = 800;
 
 // Game variables
 var robotVacuum = new component(25, 25, "grey", 225, 225, "player");
@@ -22,8 +22,8 @@ var gameWorld = {
     canvas : document.createElement("canvas"),
     start : function() {
         gameOver = false;
-        this.canvas.width = windowWidth - 10;
-        this.canvas.height = windowHeight - 100;
+        this.canvas.width = windowWidth - 100;
+        this.canvas.height = windowHeight - 400;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
