@@ -67,15 +67,7 @@ function updateObject(object) {
     ctx.translate(object.x, object.y);
     ctx.rotate(object.angle);
     ctx.fillStyle = object.color;
-    if (object.type == "player"){
-        ctx.fillRect(object.width / -2, object.height / -2, object.width, object.height);
-    }else if (object.type == "dust"){
-        ctx.fillRect(object.width / -2, object.height / -2, object.width, object.height);
-    }else if (object.type == "rug"){
-        ctx.fillRect(object.width / -2, object.height / -2, object.width, object.height);
-    }else{
-        ctx.fillRect(object.width / -2, object.height / -2, object.width, object.height);
-    }
+    ctx.fillRect(object.width / -2, object.height / -2, object.width, object.height);
     ctx.restore();
 }
 
@@ -152,31 +144,72 @@ function updateObjects(objects){
     }
 };
 
+function moveUp()    {
+    clearGameArea();
+    robotVacuum.speed = 1;
+    redrawGameArea();
+}
+function moveDown()  { 
+    clearGameArea();
+    robotVacuum.speed = -1;     
+    redrawGameArea();
+}
+function moveLeft()  { 
+    clearGameArea();
+    robotVacuum.moveAngle = -1; 
+    redrawGameArea();
+}
+function moveRight() { 
+    clearGameArea();
+    robotVacuum.moveAngle = 1;  
+    redrawGameArea();
+}
 
-function updateGameArea() {
 
+// The button press is a single event -> launch timer calling movement.
+var launchedTimer;
+
+function launchTimer(func) {
+    launchTimerStop();
+    launchedTimer = setInterval(func, 1);
+}
+
+function launchTimerStop() {
+    clearInterval(launchedTimer);
+}
+
+
+
+function clearGameArea() {
     gameWorld.clear();
     updateObjects(floorRugs);
     updateObjects(dustParticles);
     updateObjects(obstacles);
     robotVacuum.moveAngle = 0;
     robotVacuum.speed = 0;
+}
 
-    if (gameWorld.keys && gameWorld.keys[37]) { robotVacuum.moveAngle = -1; }
-    if (gameWorld.keys && gameWorld.keys[39]) { robotVacuum.moveAngle = 1; }
-    if (gameWorld.keys && gameWorld.keys[38]) { robotVacuum.speed = 1; }
-    if (gameWorld.keys && gameWorld.keys[40]) { robotVacuum.speed = -1; }
+function updateGameArea() {
+    clearGameArea()
+
+    if (gameWorld.keys && gameWorld.keys[37]) { moveLeft();  }
+    if (gameWorld.keys && gameWorld.keys[39]) { moveRight(); }
+    if (gameWorld.keys && gameWorld.keys[38]) { moveUp();    }
+    if (gameWorld.keys && gameWorld.keys[40]) { moveDown();  }
     if (gameWorld.keys && gameWorld.keys[81]) { gameOver = true; gameWorld.stop(); }
 
+    redrawGameArea();
+
+}
+
+function redrawGameArea(){
     newPos(robotVacuum);
     updateObject(robotVacuum);
     collisionWithPlayer(floorRugs);
     collisionWithPlayer(obstacles);
     collisionWithPlayer(dustParticles);
     drawStatsOnCanvas();
-
 }
-
 
 function drawStatsOnCanvas(){
     var ctx = gameWorld.context;
@@ -242,6 +275,10 @@ function randomlyAddObstacle(){
 }
 
 
+function robotSuckingStateChange(){
+    robotVacuum.sucking = !robotVacuum.sucking;
+}
+
 $(document).ready( function() {
     "use strict";
     window.addEventListener('keydown', function (e) {
@@ -252,7 +289,7 @@ $(document).ready( function() {
     window.addEventListener('keyup', function (e) {
         // suction needs to be set based on keyup -event. Behaviour is too erratic otherwise.
         if (e.keyCode == 83) {
-            robotVacuum.sucking = !robotVacuum.sucking;
+            robotSuckingStateChange();
         }else{
             gameWorld.keys = (gameWorld.keys || []);
             gameWorld.keys[e.keyCode] = (e.type == "keydown");
