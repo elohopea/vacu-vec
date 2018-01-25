@@ -39,7 +39,7 @@ var gameWorld = {
         clearInterval(this.intervalRug);
         clearInterval(this.intervalObstacle);
 
-        drawMessage("Game over", windowWidth/2-100, windowHeight/2-200);
+        drawMessage("Game over", windowWidth/2-200, windowHeight/2-200);
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -149,19 +149,19 @@ function moveUp()    {
     robotVacuum.speed = 1;
     redrawGameArea();
 }
-function moveDown()  { 
+function moveDown()  {
     clearGameArea();
-    robotVacuum.speed = -1;     
+    robotVacuum.speed = -1;
     redrawGameArea();
 }
-function moveLeft()  { 
+function moveLeft()  {
     clearGameArea();
-    robotVacuum.moveAngle = -1; 
+    robotVacuum.moveAngle = -1;
     redrawGameArea();
 }
-function moveRight() { 
+function moveRight() {
     clearGameArea();
-    robotVacuum.moveAngle = 1;  
+    robotVacuum.moveAngle = 1;
     redrawGameArea();
 }
 
