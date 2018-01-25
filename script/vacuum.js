@@ -23,7 +23,7 @@ var gameWorld = {
     start : function() {
         launchTimerStop();
         gameOver = false;
-        this.canvas.width = windowWidth;
+        this.canvas.width = windowWidth-50;
         this.canvas.height = windowHeight - 400;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -81,7 +81,7 @@ function newPos(object) {
     var xCandidate = object.x + object.speed * Math.sin(object.angle)
     var yCandidate = object.y - object.speed * Math.cos(object.angle);
 
-    if (xCandidate >= 0 && xCandidate < windowWidth ) {
+    if (xCandidate >= 0 && xCandidate < windowWidth-50 ) {
         object.x = xCandidate;
     }
     if (yCandidate >= 0 && yCandidate < windowHeight - windowHeight/2) {
