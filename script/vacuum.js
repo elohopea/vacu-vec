@@ -40,6 +40,7 @@ var gameWorld = {
         clearInterval(this.intervalObstacle);
 
         drawMessage("Game over", windowWidth/2-200, windowHeight/2-200);
+        gameOver = true;
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -190,25 +191,29 @@ function clearGameArea() {
 }
 
 function updateGameArea() {
-    clearGameArea()
+    clearGameArea();
+    if (!gameOver){
 
-    if (gameWorld.keys && gameWorld.keys[37]) { moveLeft();  }
-    if (gameWorld.keys && gameWorld.keys[39]) { moveRight(); }
-    if (gameWorld.keys && gameWorld.keys[38]) { moveUp();    }
-    if (gameWorld.keys && gameWorld.keys[40]) { moveDown();  }
-    if (gameWorld.keys && gameWorld.keys[81]) { gameOver = true; gameWorld.stop(); }
-
+        if (gameWorld.keys && gameWorld.keys[37]) { moveLeft();  }
+        if (gameWorld.keys && gameWorld.keys[39]) { moveRight(); }
+        if (gameWorld.keys && gameWorld.keys[38]) { moveUp();    }
+        if (gameWorld.keys && gameWorld.keys[40]) { moveDown();  }
+        if (gameWorld.keys && gameWorld.keys[81]) { gameOver = true; gameWorld.stop(); }
+    }
     redrawGameArea();
-
 }
 
 function redrawGameArea(){
-    newPos(robotVacuum);
-    updateObject(robotVacuum);
-    collisionWithPlayer(floorRugs);
-    collisionWithPlayer(obstacles);
-    collisionWithPlayer(dustParticles);
-    drawStatsOnCanvas();
+    if (!gameOver){
+        newPos(robotVacuum);
+        updateObject(robotVacuum);
+        collisionWithPlayer(floorRugs);
+        collisionWithPlayer(obstacles);
+        collisionWithPlayer(dustParticles);
+    }else{
+        drawMessage("Game over", windowWidth/2-200, windowHeight/2-200);
+    }
+        drawStatsOnCanvas();
 }
 
 function drawStatsOnCanvas(){
