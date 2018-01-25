@@ -359,12 +359,12 @@ $(document).ready( function() {
       if(evt.data.messageType === "LOAD") {
           gameWorld.stop();
 
-          robotVacuum     = eval('('+data.gameState.robotVacuum+')');
-          dustParticles   = eval('('+data.gameState.dustParticles+')');
-          floorRugs       = eval('('+data.gameState.floorRugs+')');
-          obstacles       = eval('('+data.gameState.obstacles+')');
-          gameOver        = eval('('+data.gameState.gameOver+')');
-          points          = eval('('+data.gameState.score+')');
+          robotVacuum     = eval('('+evt.data.gameState.robotVacuum+')');
+          dustParticles   = eval('('+evt.data.gameState.dustParticles+')');
+          floorRugs       = eval('('+evt.data.gameState.floorRugs+')');
+          obstacles       = eval('('+evt.data.gameState.obstacles+')');
+          gameOver        = eval('('+evt.data.gameState.gameOver+')');
+          points          = eval('('+evt.data.gameState.score+')');
 
           gameWorld.start();
       } else if (evt.data.messageType === "ERROR") {
