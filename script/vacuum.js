@@ -21,6 +21,7 @@ var points = 0;
 var gameWorld = {
     canvas : document.createElement("canvas"),
     start : function() {
+        launchTimerStop();
         gameOver = false;
         this.canvas.width = windowWidth - 100;
         this.canvas.height = windowHeight - 400;
@@ -41,6 +42,7 @@ var gameWorld = {
 
         drawMessage("Game over", windowWidth/2-200, windowHeight/2-200);
         gameOver = true;
+        launchTimerStop();
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -129,6 +131,7 @@ function collisionWithPlayer(objects){
                 if(object.type=="rug"){
                     gameOver = true;
                     gameWorld.stop();
+                    launchTimerStop();
                 }else if(object.type=="dust"){
                     dustParticles.splice(i, 1);
                     points = points +1;
