@@ -23,7 +23,7 @@ var gameWorld = {
     start : function() {
         launchTimerStop();
         gameOver = false;
-        this.canvas.width = windowWidth - 100;
+        this.canvas.width = windowWidth;
         this.canvas.height = windowHeight - 400;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -40,7 +40,7 @@ var gameWorld = {
         clearInterval(this.intervalRug);
         clearInterval(this.intervalObstacle);
 
-        drawMessage("Game over", windowWidth/2-200, windowHeight/2-200);
+        drawMessage("Game over", windowWidth/2-150, windowHeight/2-200);
         gameOver = true;
         launchTimerStop();
     },
@@ -81,10 +81,10 @@ function newPos(object) {
     var xCandidate = object.x + object.speed * Math.sin(object.angle)
     var yCandidate = object.y - object.speed * Math.cos(object.angle);
 
-    if (xCandidate >= 0 && xCandidate < windowWidth - 100 ) {
+    if (xCandidate >= 0 && xCandidate < windowWidth ) {
         object.x = xCandidate;
     }
-    if (yCandidate >= 0 && yCandidate < windowHeight - 400) {
+    if (yCandidate >= 0 && yCandidate < windowHeight - windowHeight/2) {
         object.y = yCandidate;
     }
 }
@@ -214,7 +214,7 @@ function redrawGameArea(){
         collisionWithPlayer(obstacles);
         collisionWithPlayer(dustParticles);
     }else{
-        drawMessage("Game over", windowWidth/2-200, windowHeight/2-200);
+        drawMessage("Game over", windowWidth/2-150, windowHeight/2-200);
     }
         drawStatsOnCanvas();
 }
@@ -227,7 +227,7 @@ function drawStatsOnCanvas(){
     ctx.fillText("Vacuum", 10, 30);
     ctx.fillText("Dust: "+points, 10, windowHeight - 420);
     if (robotVacuum.sucking){
-        ctx.fillText("Suction on", windowWidth-250, windowHeight - 420);
+        ctx.fillText("Suction on", windowWidth-150, windowHeight - 420);
     }
 
 };
