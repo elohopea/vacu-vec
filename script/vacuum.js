@@ -332,7 +332,7 @@ $(document).ready( function() {
         loc.x = e.pageX;
         loc.y = e.pageY;
         moveToTouchLocation(loc);
-    });
+    }, false);
 
 
     $("#submit_score").click( function () {
