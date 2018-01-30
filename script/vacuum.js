@@ -29,7 +29,6 @@ var gameWorld = {
         this.canvas.height = windowHeight - 400;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.frameNo = 0;
         this.intervalPlayer = setInterval(updateGameArea, 10);
         this.intervalDust = setInterval(randomlyAddDust, 100);
         this.intervalRug = setInterval(randomlyAddRug, 2000);
@@ -154,17 +153,17 @@ function updateObjects(objects){
 
 // The next functions alter player values according to events fired by
 // the UI.
-function moveUp()    {
+function moveUp() {
     clearGameArea();
     robotVacuum.speed = 1;
     redrawGameArea();
 }
-function moveDown()  {
+function moveDown() {
     clearGameArea();
     robotVacuum.speed = -1;
     redrawGameArea();
 }
-function moveLeft()  {
+function moveLeft() {
     clearGameArea();
     robotVacuum.moveAngle = -1;
     redrawGameArea();
@@ -174,9 +173,7 @@ function moveRight() {
     robotVacuum.moveAngle = 1;
     redrawGameArea();
 }
-function moveToTouchLocation(touchLocation) {
-    $("#debugconsole").html(touchLocation.x +" "+touchLocation.y);
-}
+
 
 /*
     The button press is a single event. A timer is used to call the movement
@@ -185,15 +182,35 @@ function moveToTouchLocation(touchLocation) {
     the timer is not cleared.
 */
 var launchedTimer;
-
 function launchTimer(func) {
     launchTimerStop();
     launchedTimer = setInterval(func, 1);
 }
-
 function launchTimerStop() {
     clearInterval(launchedTimer);
 }
+
+
+function moveRobotOneStepTowards(endLoc) {
+    moveUp();
+}
+
+function moveToTouchLocation(touchLocation) {
+    // user has touched a location on canvas and the robot
+    // will try to pursuit to it.
+
+    // calculate angle to set robot facing the right direction
+    var posVecX = robotVacuum.x - touchLocation.x;
+    var posVecY = robotVacuum.y - touchLocation.y;
+    var length = Math.sqrt(posVecX*posVecX + posVecY*posVecY)
+    var angle = Math.atan2(posVecY, posVecX) - 2 + 0.37 ;
+    robotVacuum.angle = angle;
+
+    // This should be a timer or timeout but this shall suffice.
+    // The game can be played with android phone.
+    moveRobotOneStepTowards( touchLocation );
+}
+
 
 
 // This empties the canvas for the elements to be redrawn on it.
@@ -231,7 +248,7 @@ function redrawGameArea(){
     }else{
         drawMessage("Game over", windowWidth/2-150, windowHeight/2-200);
     }
-        drawStatsOnCanvas();
+    drawStatsOnCanvas();
 }
 
 // This draws the texts and points to the canvas.
@@ -333,6 +350,13 @@ $(document).ready( function() {
         loc.y = e.pageY;
         moveToTouchLocation(loc);
     }, false);
+    document.getElementsByTagName("canvas")[0].addEventListener('click', function (e) {
+        // If user clicks mouse on canvas the robot will move to that location.
+        var loc = {};
+        loc.x = e.pageX;
+        loc.y = e.pageY;
+        moveToTouchLocation(loc);
+    });
 
 
     $("#submit_score").click( function () {
