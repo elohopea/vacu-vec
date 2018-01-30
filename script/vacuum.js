@@ -193,6 +193,13 @@ function launchTimerStop() {
 
 function moveRobotOneStepTowards(endLoc) {
     moveUp();
+    moveUp();
+    moveUp();
+    moveUp();
+    moveUp();
+    moveUp();
+    moveUp();
+    moveUp();
 }
 
 function moveToTouchLocation(touchLocation) {
