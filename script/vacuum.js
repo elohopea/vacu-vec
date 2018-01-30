@@ -18,12 +18,14 @@ var gameOver = false;
 var points = 0;
 
 
+// This is the game world for objects to roam.
+// It is started when game starts and stopped when game ends.
 var gameWorld = {
     canvas : document.createElement("canvas"),
     start : function() {
         launchTimerStop();
         gameOver = false;
-        this.canvas.width = windowWidth-50;
+        this.canvas.width = windowWidth;
         this.canvas.height = windowHeight - 400;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -49,7 +51,7 @@ var gameWorld = {
     }
 }
 
-
+// Every element in the game is a component.
 function component(width, height, color, x, y, type) {
     this.type = type;
     this.width = width;
@@ -63,7 +65,7 @@ function component(width, height, color, x, y, type) {
     this.sucking = false;
 }
 
-
+// Objects are cleared from canvas and the redrawing is done by this update function.
 function updateObject(object) {
     var ctx = gameWorld.context;
     ctx.save();
@@ -74,14 +76,15 @@ function updateObject(object) {
     ctx.restore();
 }
 
-
+// This calculates the objects new position according to objects variable values
+// moving objects are not allowed to go outside of the world or canvas.
 function newPos(object) {
     object.angle += object.moveAngle * Math.PI / 180;
 
     var xCandidate = object.x + object.speed * Math.sin(object.angle)
     var yCandidate = object.y - object.speed * Math.cos(object.angle);
 
-    if (xCandidate >= 0 && xCandidate < windowWidth-50 ) {
+    if (xCandidate >= 0 && xCandidate < windowWidth ) {
         object.x = xCandidate;
     }
     if (yCandidate >= 0 && yCandidate < windowHeight - windowHeight/2) {
@@ -89,7 +92,8 @@ function newPos(object) {
     }
 }
 
-
+// This function checks if two objects (object and that) are in the same place
+// on the canvas and returns true or false.
 function collisionWith(object, that) {
     var myleft = object.x;
     var myright = object.x + (object.width);
@@ -148,6 +152,8 @@ function updateObjects(objects){
     }
 };
 
+// The next functions alter player values according to events fired by
+// the UI.
 function moveUp()    {
     clearGameArea();
     robotVacuum.speed = 1;
@@ -168,9 +174,17 @@ function moveRight() {
     robotVacuum.moveAngle = 1;
     redrawGameArea();
 }
+function moveToTouchLocation(touchLocation) {
+    console.log(touchLocation.x);
+    console.log(touchLocation.y);
+}
 
-
-// The button press is a single event -> launch timer calling movement.
+/*
+    The button press is a single event. A timer is used to call the movement
+    function if a button is being held down. Once lifted the timer is cleared.
+    If user presses the button down and moves the mouse away from the button
+    the timer is not cleared.
+*/
 var launchedTimer;
 
 function launchTimer(func) {
@@ -183,7 +197,7 @@ function launchTimerStop() {
 }
 
 
-
+// This empties the canvas for the elements to be redrawn on it.
 function clearGameArea() {
     gameWorld.clear();
     updateObjects(floorRugs);
@@ -193,6 +207,7 @@ function clearGameArea() {
     robotVacuum.speed = 0;
 }
 
+// This function is called by intervalPlayer to allow game progression.
 function updateGameArea() {
     clearGameArea();
     if (!gameOver){
@@ -206,6 +221,7 @@ function updateGameArea() {
     redrawGameArea();
 }
 
+// actual drawing to canvas is done with this function.
 function redrawGameArea(){
     if (!gameOver){
         newPos(robotVacuum);
@@ -219,6 +235,7 @@ function redrawGameArea(){
         drawStatsOnCanvas();
 }
 
+// This draws the texts and points to the canvas.
 function drawStatsOnCanvas(){
     var ctx = gameWorld.context;
     ctx.save();
@@ -232,7 +249,7 @@ function drawStatsOnCanvas(){
 
 };
 
-
+// generic message drawing function. Used to draw "Game over" on canvas.
 function drawMessage(msg, x, y) {
     var ctx = gameWorld.context;
     ctx.save();
@@ -241,18 +258,19 @@ function drawMessage(msg, x, y) {
     ctx.fillText(msg, x, y);
 }
 
-
+// generate random location for dust, rugs and obstacles.
 function getRandomLocation(){
-    var toBeReturned = {};
-    toBeReturned.x = Math.floor(Math.random() * (windowWidth + 1));
-    toBeReturned.y = Math.floor(Math.random() * (windowHeight + 1));
-    return toBeReturned;
+    var randomLoc = {};
+    randomLoc.x = Math.floor(Math.random() * (windowWidth + 1));
+    randomLoc.y = Math.floor(Math.random() * (windowHeight + 1));
+    return randomLoc;
 }
 
 
+// random angle for objects added to canvas.
 function getRandomAngle(){
-    var toBeReturned = Math.random() * 360*Math.PI/180;
-    return toBeReturned;
+    var randomAngle = Math.random() * 360*Math.PI/180;
+    return randomAngle;
 }
 
 
@@ -287,8 +305,13 @@ function robotSuckingStateChange(){
     robotVacuum.sucking = !robotVacuum.sucking;
 }
 
+
+// The next section starts the game once everything has been loaded.
+// It also contains the messaging.
 $(document).ready( function() {
     "use strict";
+
+    // Add listeners to record keypresses and to send them to gameWorld
     window.addEventListener('keydown', function (e) {
         e.preventDefault();
         gameWorld.keys = (gameWorld.keys || []);
@@ -303,6 +326,15 @@ $(document).ready( function() {
             gameWorld.keys[e.keyCode] = (e.type == "keydown");
         }
     });
+    document.getElementsByTagName("canvas")[0].addEventListener('touchend', function (e) {
+        // If user has touched a location on canvas,
+        // the robot will move to this location.
+        var loc;
+        loc.x = e.pageX;
+        loc.y = e.pageY;
+        moveToTouchLocation(loc);
+    });
+
 
     $("#submit_score").click( function () {
       var msg = {
@@ -312,7 +344,8 @@ $(document).ready( function() {
       window.parent.postMessage(msg, "*");
     });
 
-
+    // User has pressed restart so the current game is cleared and a new one
+    // is launched.
     $("#restart").click( function () {
         gameWorld.stop();
 
@@ -330,6 +363,7 @@ $(document).ready( function() {
     // Sends this game's state to the service.
     // The format of the game state is decided
     // by the game
+    // JSON
     $("#save").click( function () {
       var msg = {
         "messageType": "SAVE",
