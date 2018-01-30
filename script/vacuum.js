@@ -175,9 +175,7 @@ function moveRight() {
     redrawGameArea();
 }
 function moveToTouchLocation(touchLocation) {
-    console.log(touchLocation.x);
-    console.log(touchLocation.y);
-    moveUp();
+    $("#debugconsole").html(touchLocation.x +" "+touchLocation.y);
 }
 
 /*
