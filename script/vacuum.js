@@ -177,6 +177,7 @@ function moveRight() {
 function moveToTouchLocation(touchLocation) {
     console.log(touchLocation.x);
     console.log(touchLocation.y);
+    moveUp();
 }
 
 /*
